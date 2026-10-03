@@ -95,18 +95,62 @@ If everything is fine it says so. If not, it says exactly what is wrong and how 
 
 Options: `--offline` skips the PyPI lookup, `--no-install` skips the clean install test, `--force` runs the build tests even when the basic checks found problems.
 
-## Publish
+## Publish (new in 0.3.0)
 
-When `reverie deepcheck` says all is fine, you need a free PyPI account and an API token. Then:
+You need a free PyPI account and an API token. Then, inside your project folder:
 
 ```
 pip install build twine
+reverie publish
+```
+
+reverie does the whole job for you, in three steps:
+
+1. Runs the deep check. If anything is wrong, it stops and nothing is uploaded.
+2. Builds fresh files in a temporary place, so old files can never be sent by accident.
+3. Asks you to type the version number to confirm, asks for your token, and uploads.
+
+Your token is typed with nothing showing on screen, is never saved, and is never printed.
+
+Options: `--test` uploads to TestPyPI, a practice website (it needs its own account and token), and `--dry-run` does everything except the upload.
+
+If the upload fails, reverie explains the reason in plain language, for example a wrong token or a version that already exists.
+
+You can still publish by hand if you prefer:
+
+```
 python -m build
 twine check dist/*
 twine upload dist/*
 ```
 
 Delete any old `dist` folder before you build.
+
+## Upload to GitHub (new in 0.4.0)
+
+```
+reverie github
+```
+
+reverie uploads your project files straight to your GitHub account. You do not need git or any other tool, only a Personal Access Token.
+
+**Make a token once:** on GitHub click your picture, then Settings, Developer settings, Personal access tokens, Tokens (classic), Generate new token (classic). Give it a name, tick the box called `repo`, create it, and copy it.
+
+What reverie does:
+
+1. Looks through your files for passwords, keys and tokens. If it finds one, it stops.
+2. Asks for your token. Nothing shows on screen while you paste, and the token is never saved or printed.
+3. Finds your repository, and offers to create it if it does not exist yet.
+4. Asks you to type the repository name to confirm, then uploads the files. Files that did not change are skipped, so running it again only sends what you changed.
+5. Offers to make a release for your version, like `v0.4.0`.
+
+It leaves out files that should never go on GitHub: `dist`, `build`, `__pycache__`, `.egg-info`, `.env` and similar.
+
+The repository is taken from the GitHub address in your `pyproject.toml`. To choose another one, use `--repo your-name/my-tool`.
+
+Options: `--dry-run` shows what would be uploaded without uploading, `--private` makes a new repository private, `--message "text"` sets the note GitHub shows next to the files, and `--repo` picks the repository.
+
+Each uploaded file shows on GitHub as its own small change. That is normal for this method.
 
 ## Command not recognised?
 
