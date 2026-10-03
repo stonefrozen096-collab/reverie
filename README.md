@@ -70,9 +70,34 @@ It looks for the mistakes that most often hurt first-time publishers:
 
 Every problem comes with a plain-language fix. Add `--offline` to skip the PyPI lookup.
 
+## Deep check (new in 0.2.0)
+
+Because a published version can never be changed, run the thorough check right before you upload:
+
+```
+pip install build twine
+reverie deepcheck
+```
+
+It does everything `reverie check` does, and then goes much further:
+
+| It does | Why it matters |
+| ------- | -------------- |
+| Reads every Python file | A typing mistake would break your package |
+| Looks for passwords, keys and tokens in your files | A leaked key can be used by anyone |
+| Looks for leftover starter text | So you do not publish "Hello from..." |
+| Builds your package from a clean copy | Finds build problems before PyPI does |
+| Runs twine check | Makes sure your PyPI page will work |
+| Looks inside the built files | Makes sure your code and LICENSE are really included |
+| Installs it in a brand-new empty environment | Proves it works for other people, not only on your laptop |
+
+If everything is fine it says so. If not, it says exactly what is wrong and how to fix it. reverie never runs your program itself, it only checks that it can be loaded.
+
+Options: `--offline` skips the PyPI lookup, `--no-install` skips the clean install test, `--force` runs the build tests even when the basic checks found problems.
+
 ## Publish
 
-When `reverie check` says no problems, you need a free PyPI account and an API token. Then:
+When `reverie deepcheck` says all is fine, you need a free PyPI account and an API token. Then:
 
 ```
 pip install build twine

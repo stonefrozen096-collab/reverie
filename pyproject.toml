@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "reveriee"
-version = "0.1.0"
+version = "0.2.0"
 description = "Turn your idea into a published Python package: create the project files, then check them before you upload."
 readme = "README.md"
 requires-python = ">=3.9"
