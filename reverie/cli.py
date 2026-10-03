@@ -537,11 +537,37 @@ def main():
     deep.add_argument("--force", action="store_true",
                       help="Run the build tests even if the basic checks found problems")
 
+    publish = commands.add_parser(
+        "publish",
+        help="Run the deep check, build, and upload your package to PyPI")
+    publish.add_argument("folder", nargs="?", default=".", help="Project folder (default: this folder)")
+    publish.add_argument("--test", action="store_true",
+                         help="Upload to TestPyPI, the practice website, instead of the real PyPI")
+    publish.add_argument("--dry-run", action="store_true",
+                         help="Do everything except the upload")
+
+    github = commands.add_parser(
+        "github",
+        help="Upload your project to GitHub using a Personal Access Token")
+    github.add_argument("folder", nargs="?", default=".", help="Project folder (default: this folder)")
+    github.add_argument("--repo", help="Repository to upload to, like your-name/my-tool")
+    github.add_argument("--private", action="store_true",
+                        help="If the repository has to be created, make it private")
+    github.add_argument("--message", help="The note GitHub shows next to the uploaded files")
+    github.add_argument("--dry-run", action="store_true",
+                        help="Show what would be uploaded, without uploading")
+
     args = parser.parse_args()
     if args.command == "new":
         return command_new(args)
     if args.command == "check":
         return command_check(args)
+    if args.command == "github":
+        from reverie.github import command_github
+        return command_github(args)
+    if args.command == "publish":
+        from reverie.publish import command_publish
+        return command_publish(args)
     if args.command == "deepcheck":
         from reverie.deepcheck import command_deepcheck
         return command_deepcheck(args)
