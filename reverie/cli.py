@@ -528,11 +528,23 @@ def main():
     check.add_argument("folder", nargs="?", default=".", help="Project folder (default: this folder)")
     check.add_argument("--offline", action="store_true", help="Do not look at PyPI")
 
+    deep = commands.add_parser(
+        "deepcheck",
+        help="A very thorough check: builds and test-installs your package before you upload")
+    deep.add_argument("folder", nargs="?", default=".", help="Project folder (default: this folder)")
+    deep.add_argument("--offline", action="store_true", help="Do not look at PyPI")
+    deep.add_argument("--no-install", action="store_true", help="Skip the clean install test")
+    deep.add_argument("--force", action="store_true",
+                      help="Run the build tests even if the basic checks found problems")
+
     args = parser.parse_args()
     if args.command == "new":
         return command_new(args)
     if args.command == "check":
         return command_check(args)
+    if args.command == "deepcheck":
+        from reverie.deepcheck import command_deepcheck
+        return command_deepcheck(args)
     parser.print_help()
     return 0
 
