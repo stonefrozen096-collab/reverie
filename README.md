@@ -2,7 +2,7 @@
 
 **Turn your idea into a published Python package.** Create the project files with one command, then check everything before you upload.
 
-![PyPI](https://img.shields.io/pypi/v/reveriee) ![License](https://img.shields.io/pypi/l/reveriee) ![Python](https://img.shields.io/pypi/pyversions/reveriee)
+![PyPI](https://img.shields.io/pypi/v/reveriee?v=2) ![License](https://img.shields.io/pypi/l/reveriee) ![Python](https://img.shields.io/pypi/pyversions/reveriee)
 
 Publishing your first Python package means getting a lot of small files and settings right. One wrong detail, like a version that already exists or a README full of stray symbols, only shows up after you upload, and a published version can never be changed. reverie sets up the boring parts correctly and warns you about the common mistakes first.
 
