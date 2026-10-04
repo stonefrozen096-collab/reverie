@@ -557,11 +557,26 @@ def main():
     github.add_argument("--dry-run", action="store_true",
                         help="Show what would be uploaded, without uploading")
 
+    write = commands.add_parser(
+        "write",
+        help="An AI model writes your whole package from your idea (uses your own AI key)")
+    write.add_argument("--provider", help="claude, openai, gemini or groq (otherwise you are asked)")
+    write.add_argument("--model", help="Model name (otherwise you pick from a list)")
+    write.add_argument("--offline", action="store_true", help="Do not check the package name on PyPI")
+
+    commands.add_parser("usage", help="Show how many AI tokens reverie write has used")
+
     args = parser.parse_args()
     if args.command == "new":
         return command_new(args)
     if args.command == "check":
         return command_check(args)
+    if args.command == "write":
+        from reverie.write import command_write
+        return command_write(args)
+    if args.command == "usage":
+        from reverie.write import command_usage
+        return command_usage(args)
     if args.command == "github":
         from reverie.github import command_github
         return command_github(args)
