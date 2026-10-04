@@ -17,7 +17,7 @@ from reverie import deepcheck
 API = "https://api.github.com"
 SKIP_DIRS = {".git", "dist", "build", "__pycache__", ".venv", "venv", ".idea", ".vscode", "node_modules"}
 SKIP_SUFFIXES = (".pyc", ".pyo")
-SKIP_NAMES = {".env", ".DS_Store", "Thumbs.db"}
+SKIP_NAMES = {".env", ".ds_store", "thumbs.db", "desktop.ini"}
 MAX_BYTES = 25 * 1024 * 1024
 
 TOKEN_HELP = (
@@ -92,7 +92,7 @@ def collect_files(folder):
         dirs[:] = sorted(d for d in dirs if d not in SKIP_DIRS and not d.endswith(".egg-info"))
         for name in sorted(names):
             path = Path(root) / name
-            if name in SKIP_NAMES or name.endswith(SKIP_SUFFIXES):
+            if name.lower() in SKIP_NAMES or name.lower().startswith(".env.") or name.endswith(SKIP_SUFFIXES):
                 continue
             if path.stat().st_size > MAX_BYTES:
                 skipped.append(path.relative_to(folder).as_posix())
