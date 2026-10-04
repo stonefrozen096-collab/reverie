@@ -40,6 +40,37 @@ my-tool/
 
 The new project already installs and runs and prints a hello message. Open `cli.py` and replace the hello message with your own idea.
 
+## Let an AI write your package (new in 0.5.0)
+
+```
+reverie write
+```
+
+Describe your idea, and an AI model writes the whole package for you. It works with **Claude, OpenAI, Gemini and Groq**. You use your own key from the company, so the tokens come out of your own account. reverie itself is free.
+
+How it works:
+
+1. Pick your company and paste your key. Nothing shows on screen while you paste, and the key is never saved. reverie checks the key right away and tells you if it is valid.
+2. reverie asks the company which models your key can use, and you pick one from the list.
+3. Answer a few questions: what the package is for, its name, a one-line description, your name, and anything specific you want.
+4. reverie asks the model for a plan, and shows you the list of files. You type `yes` to continue, or stop there.
+5. reverie creates the project folder with the same safe files as `reverie new`, then the model writes the code one file at a time. After each file, reverie checks it. If the file has a typing mistake, an import that does not exist, or a mismatch with the other files, the model is asked to fix it.
+6. At the end, reverie runs `reverie check` and tells you what to do next.
+
+By default the package uses only standard Python, so there is nothing extra to install. You can allow other pip packages when it asks.
+
+Important: the code is written by an AI. reverie checks that it can be read and that the files fit together, but it never runs it. Read the code, try it yourself, and watch for any lines reverie warns you about, such as code that deletes files.
+
+### How many tokens did that use?
+
+```
+reverie usage
+```
+
+reverie counts the tokens each package used and keeps the numbers on your own computer. `reverie usage` shows today's total, the last 7 days, and the latest packages. Look up your company's price for tokens to work out your spending. Prices change, so reverie does not guess them.
+
+Options for `reverie write`: `--provider claude|openai|gemini|groq`, `--model NAME`, and `--offline` to skip the PyPI name check. To skip the key question, set the `REVERIE_AI_KEY` environment variable.
+
 ## Check before you upload
 
 Inside your project folder, run:
@@ -144,13 +175,15 @@ What reverie does:
 4. Asks you to type the repository name to confirm, then uploads the files. Files that did not change are skipped, so running it again only sends what you changed.
 5. Offers to make a release for your version, like `v0.4.0`.
 
-It leaves out files that should never go on GitHub: `dist`, `build`, `__pycache__`, `.egg-info`, `.env` and similar.
+It leaves out files that should never go on GitHub: `dist`, `build`, `__pycache__`, `.egg-info`, `.env`, `desktop.ini` and similar.
 
 The repository is taken from the GitHub address in your `pyproject.toml`. To choose another one, use `--repo your-name/my-tool`.
 
 Options: `--dry-run` shows what would be uploaded without uploading, `--private` makes a new repository private, `--message "text"` sets the note GitHub shows next to the files, and `--repo` picks the repository.
 
 Each uploaded file shows on GitHub as its own small change. That is normal for this method.
+
+Windows sometimes creates a hidden file called `desktop.ini` inside a folder. It is harmless. If one ever ends up in your repository, you can remove it on GitHub: open the file, click the three dots, and choose Delete file.
 
 ## Command not recognised?
 
